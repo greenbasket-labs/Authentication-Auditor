@@ -1,0 +1,28 @@
+kind = "web"
+previewPath = "/"
+title = "Authentication Auditor"
+description = "A local-first source-code auditor for reviewing authentication implementations in JavaScript, TypeScript, and Python. It identifies review leads, maps authentication-related code, and exports redacted evidence and remediation reports; uploaded code is analyzed in the browser and never executed or sent to a live target."
+version = "1.0.0"
+id = "artifacts/authentication-auditor"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 19224
+
+[services.development]
+run = "pnpm --filter @workspace/authentication-auditor run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/authentication-auditor", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/authentication-auditor/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "19224"
+BASE_PATH = "/"
